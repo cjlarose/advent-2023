@@ -5,7 +5,7 @@ Implemented in Nix.
 To build:
 
 ```
-nix build .#day1
+nix build .#day1.solution
 ```
 
 The output will be in `result`
