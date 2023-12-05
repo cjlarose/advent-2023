@@ -7,7 +7,7 @@
     lines = builtins.filter (line: builtins.isString line && line != "") (strings.splitString "\n" input);
     calibrationValue = line:
       let
-        chars = strings.stringToCharacters (builtins.trace "line: ${line}" line);
+        chars = strings.stringToCharacters line;
         onlyDigits = builtins.filter (c: builtins.match "[[:digit:]]" c != null) chars;
         firstDigit = builtins.head onlyDigits;
         lastDigit = lists.last onlyDigits;
