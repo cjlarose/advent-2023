@@ -16,7 +16,7 @@
       in
         strings.toInt valueAsString;
     calibrationValues = map calibrationValue lines;
-    sumOfCalibrationVales = builtins.foldl' (acc: x: acc + x) 0 calibrationValues;
+    sumOfCalibrationValues = builtins.foldl' (acc: x: acc + x) 0 calibrationValues;
 
     suffixesOf = str: let
       chars = strings.stringToCharacters str;
@@ -69,6 +69,6 @@
     inherit input suffixesOf extractNumericPrefix firstDigit lastDigit calibrationValue' sumOfCalibrationValues';
     solution = pkgs.writeTextFile {
       name = "day1";
-      text = "${builtins.toString sumOfCalibrationVales}\n${builtins.toString sumOfCalibrationValues'}\n";
+      text = "${builtins.toString sumOfCalibrationValues}\n${builtins.toString sumOfCalibrationValues'}\n";
     };
   }
