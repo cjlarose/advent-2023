@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 inputs_dir=./inputs
+year=2023
 
 if [[ $# -lt 1 ]]
 then
@@ -17,7 +18,7 @@ fi
 mkdir -p "$inputs_dir"
 
 for problem_number in "$@"; do
-  url='https://adventofcode.com/2022/day/'$problem_number'/input'
+  url='https://adventofcode.com/'"$year"'/day/'$problem_number'/input'
   output_filename="$inputs_dir/$problem_number".txt
   curl --silent "$url" -H 'Cookie: '"$ADVENT_SESSION_COOKIE" > "$output_filename"
 done
