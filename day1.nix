@@ -23,10 +23,7 @@
       indexes = lists.range 0 (builtins.length chars - 1);
     in map (i: strings.concatStrings (lists.drop i chars)) indexes;
 
-    numberToken = [
-      "1" "2" "3" "4" "5" "6" "7" "8" "9"
-      "one" "two" "three" "four" "five" "six" "seven" "eight" "nine"
-    ];
+    numberToken = builtins.attrNames intMapping;
     extractNumericPrefix = str:
       let
         matches = map (prefix: if strings.hasPrefix prefix str then prefix else null) numberToken;
