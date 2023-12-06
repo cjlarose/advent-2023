@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 main() {
   day=$1
   outpath=$(nix build ".#day${day}.solution" --print-out-paths)
