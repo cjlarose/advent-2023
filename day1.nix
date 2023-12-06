@@ -3,7 +3,7 @@
     strings = pkgs.lib.strings;
     lists = pkgs.lib.lists;
   in rec {
-    input = builtins.readFile ./inputs/day1.txt;
+    input = builtins.readFile ./inputs/1.txt;
     lines = builtins.filter (line: builtins.isString line && line != "") (strings.splitString "\n" input);
 
     calibrationValue = line:
