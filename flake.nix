@@ -16,9 +16,14 @@
       packages = forAllSystems (system:
         let
           pkgs = nixpkgsFor.${system};
-        in {
-          day1 = import ./day1.nix { inherit pkgs; };
-          day6 = import ./day6.nix { inherit pkgs; };
-        });
+          days = [ 1 6 ];
+          solutionForDay = dayNumber:
+            let dayString = builtins.toString dayNumber;
+            in {
+              name = "day${dayString}";
+              value = import ./day${dayString}.nix { inherit pkgs; };
+            };
+        in builtins.listToAttrs (map solutionForDay days)
+      );
     };
 }
