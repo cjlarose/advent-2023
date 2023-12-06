@@ -18,6 +18,7 @@
           pkgs = nixpkgsFor.${system};
         in {
           day1 = import ./day1.nix { inherit pkgs; };
+          day6 = import ./day6.nix { inherit pkgs; };
         });
     };
 }
