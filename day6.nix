@@ -12,6 +12,9 @@
         map strings.toInt matches;
     times = parseNumbers (builtins.elemAt matches 0);
     distances = parseNumbers (builtins.elemAt matches 1);
+    races = let
+      f = raceDurationMs: recordDistanceMm: { inherit raceDurationMs recordDistanceMm; };
+    in lists.zipListsWith f times distances;
 
     totalDistanceMm = raceDurationMs: buttonHoldMs: 
       let
@@ -23,11 +26,10 @@
     possibleDistances = raceDurationMs:
       map (totalDistanceMm raceDurationMs) (lists.range 0 raceDurationMs);
 
-    numberOfPossibleWins = raceDurationMs: recordDistanceMm:
+    numberOfPossibleWins = { raceDurationMs, recordDistanceMm }:
       builtins.length (builtins.filter (x: x > recordDistanceMm) (possibleDistances raceDurationMs));
 
-    races = lists.zipListsWith (raceDurationMs: recordDistanceMm: { inherit raceDurationMs recordDistanceMm; }) times distances;
-    numPossibleWinsForEachRace = map ({ raceDurationMs, recordDistanceMm }: numberOfPossibleWins raceDurationMs recordDistanceMm) races;
+    numPossibleWinsForEachRace = map numberOfPossibleWins races;
     product = builtins.foldl' (acc: x: acc * x) 1;
 
     solution = pkgs.writeTextFile {
