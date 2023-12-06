@@ -2,10 +2,10 @@
 
 Implemented in Nix.
 
-To build:
+To run day 1:
 
 ```
-nix build .#day1.solution
+./run.sh 1
 ```
 
-The output will be in `result`
+The output will be in `outputs/day1.txt`
