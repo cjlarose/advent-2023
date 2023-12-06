@@ -2,7 +2,7 @@
   let
     strings = pkgs.lib.strings;
     lists = pkgs.lib.lists;
-
+  in rec {
     input = builtins.readFile ./inputs/day1.txt;
     lines = builtins.filter (line: builtins.isString line && line != "") (strings.splitString "\n" input);
 
@@ -62,8 +62,6 @@
 
     calibrationValues' = map calibrationValue' lines;
     sumOfCalibrationValues' = builtins.foldl' (acc: x: acc + x) 0 calibrationValues';
-  in {
-    inherit input suffixesOf extractNumericPrefix firstDigit lastDigit calibrationValue' sumOfCalibrationValues';
     solution = pkgs.writeTextFile {
       name = "day1";
       text = "${builtins.toString sumOfCalibrationValues}\n${builtins.toString sumOfCalibrationValues'}\n";
