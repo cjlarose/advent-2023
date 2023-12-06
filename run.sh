@@ -6,6 +6,7 @@ main() {
   mkdir -p outputs
   rm -f "outputs/${day}.txt"
   cp "$outpath" "outputs/${day}.txt"
+  echo "$(< "outputs/${day}.txt")"
 }
 
 main "$@"
