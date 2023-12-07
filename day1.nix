@@ -1,32 +1,32 @@
 { pkgs, ... }:
   let
-    strings = pkgs.lib.strings;
-    lists = pkgs.lib.lists;
+    inherit (pkgs.lib.strings) concatStrings hasPrefix splitString stringToCharacters toInt;
+    inherit (pkgs.lib.lists) drop last range reverseList;
   in rec {
     input = builtins.readFile ./inputs/1.txt;
-    lines = builtins.filter (line: builtins.isString line && line != "") (strings.splitString "\n" input);
+    lines = builtins.filter (line: builtins.isString line && line != "") (splitString "\n" input);
 
     calibrationValue = line:
       let
-        chars = strings.stringToCharacters line;
+        chars = stringToCharacters line;
         onlyDigits = builtins.filter (c: builtins.match "[[:digit:]]" c != null) chars;
         firstDigit = builtins.head onlyDigits;
-        lastDigit = lists.last onlyDigits;
+        lastDigit = last onlyDigits;
         valueAsString = firstDigit + lastDigit;
       in
-        strings.toInt valueAsString;
+        toInt valueAsString;
     calibrationValues = map calibrationValue lines;
     sumOfCalibrationValues = builtins.foldl' (acc: x: acc + x) 0 calibrationValues;
 
     suffixesOf = str: let
-      chars = strings.stringToCharacters str;
-      indexes = lists.range 0 (builtins.length chars - 1);
-    in map (i: strings.concatStrings (lists.drop i chars)) indexes;
+      chars = stringToCharacters str;
+      indexes = range 0 (builtins.length chars - 1);
+    in map (i: concatStrings (drop i chars)) indexes;
 
     numberToken = builtins.attrNames intMapping;
     extractNumericPrefix = str:
       let
-        matches = map (prefix: if strings.hasPrefix prefix str then prefix else null) numberToken;
+        matches = map (prefix: if hasPrefix prefix str then prefix else null) numberToken;
         nonNullMatches = builtins.filter (x: x != null) matches;
       in
         if nonNullMatches == [] then null else builtins.head nonNullMatches;
@@ -53,12 +53,12 @@
       nine = 9;
     };
     firstDigit = str: builtins.head (builtins.filter (x: x != null) (map extractNumericPrefix (suffixesOf str)));
-    lastDigit = str: builtins.head (builtins.filter (x: x != null) (map extractNumericPrefix (lists.reverseList (suffixesOf str))));
+    lastDigit = str: builtins.head (builtins.filter (x: x != null) (map extractNumericPrefix (reverseList (suffixesOf str))));
     calibrationValue' = str:
       let
         first = intMapping."${firstDigit str}";
         last = intMapping."${lastDigit str}";
-      in strings.toInt (strings.concatStrings (map builtins.toString [ first last ]));
+      in toInt (concatStrings (map builtins.toString [ first last ]));
 
     calibrationValues' = map calibrationValue' lines;
     sumOfCalibrationValues' = builtins.foldl' (acc: x: acc + x) 0 calibrationValues';

@@ -1,7 +1,7 @@
 { pkgs, ... }:
   rec {
-    strings = pkgs.lib.strings;
-    lists = pkgs.lib.lists;
+    inherit (pkgs.lib.strings) concatStrings toInt;
+    inherit (pkgs.lib.lists) zipListsWith;
 
     input = builtins.readFile ./inputs/6.txt;
     matches = builtins.match "Time:([[:digit:] ]+)\nDistance:([[:digit:] ]+)\n" input;
@@ -9,12 +9,12 @@
       let
         matches = builtins.filter (x: builtins.isString x && x != "") (builtins.split " +" str);
       in
-        map strings.toInt matches;
+        map toInt matches;
     times = parseNumbers (builtins.elemAt matches 0);
     distances = parseNumbers (builtins.elemAt matches 1);
     races = let
       f = raceDurationMs: recordDistanceMm: { inherit raceDurationMs recordDistanceMm; };
-    in lists.zipListsWith f times distances;
+    in zipListsWith f times distances;
 
     abs = x: if x < 0 then - x else x;
     heronsMethod = (x: guess:
@@ -51,7 +51,7 @@
     product = builtins.foldl' (acc: x: acc * x) 1;
 
     bigRace = let
-      concatAsStrings = nums: strings.toInt (strings.concatStrings (map builtins.toString nums));
+      concatAsStrings = nums: toInt (concatStrings (map builtins.toString nums));
     in {
       raceDurationMs = concatAsStrings times;
       recordDistanceMm = concatAsStrings distances;
